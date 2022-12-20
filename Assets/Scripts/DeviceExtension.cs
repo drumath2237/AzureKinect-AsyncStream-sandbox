@@ -6,7 +6,7 @@ using Microsoft.Azure.Kinect.Sensor;
 
 namespace AzureKinectAsyncStreamSandbox
 {
-    public static partial class DeviceExtension
+    public static class DeviceExtension
     {
         public static async IAsyncEnumerable<Capture> GetAsyncFrameStream(
             this Device device,
