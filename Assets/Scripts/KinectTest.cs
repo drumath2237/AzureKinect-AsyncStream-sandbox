@@ -9,11 +9,18 @@ namespace AzureKinectAsyncStreamSandbox
     {
         private readonly CancellationTokenSource _cancellationTokenSource = new();
         private SynchronizationContext _synchronizationContext;
-        [SerializeField] private Texture2D colorTexture;
+        private Texture2D _colorTexture;
+
+        [SerializeField] private MeshRenderer colorMeshRenderer;
+        
+        
 
         private void Start()
         {
             _synchronizationContext = SynchronizationContext.Current;
+            _colorTexture = new Texture2D(720, 1280, TextureFormat.BGRA32, false);
+            colorMeshRenderer.material.mainTexture = _colorTexture;
+            
             _ = StartCaptureLoop();
         }
 
@@ -34,13 +41,13 @@ namespace AzureKinectAsyncStreamSandbox
                 var jpegData = capture.Color.Memory.ToArray();
                 _synchronizationContext.Post(_ =>
                 {
-                    if (colorTexture == null)
+                    if (_colorTexture == null)
                     {
                         return;
                     }
 
-                    colorTexture.LoadRawTextureData(jpegData);
-                    colorTexture.Apply();
+                    _colorTexture.LoadRawTextureData(jpegData);
+                    _colorTexture.Apply();
                 }, null);
                 capture.Dispose();
             }
